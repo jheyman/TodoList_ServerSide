@@ -8,17 +8,19 @@
                             PDO::ERRMODE_EXCEPTION);
 
     // Prepare INSERT statement to SQLite3 file db
-    $insert = "INSERT INTO todolist (item, creationdate) 
-                VALUES (:item, :creationdate)";
+    $insert = "INSERT INTO todolist (item, creationdate, priority) 
+                VALUES (:item, :creationdate, :priority)";
     $stmt = $file_db->prepare($insert);
 
     // Bind parameters to statement variables
     $stmt->bindParam(':item', $item);
     $stmt->bindParam(':creationdate', $creationdate);
+    $stmt->bindParam(':priority', $priority);
 
     // Set values to bound variables
     $item = $_REQUEST['newitem'];
     $creationdate = $_REQUEST['creationdate'];
+    $priority = $_REQUEST['priority'];
 
     // Execute statement
     $stmt->execute();

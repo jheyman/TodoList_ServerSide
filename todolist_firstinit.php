@@ -22,33 +22,39 @@
     // Create table messages
     $file_db->exec("CREATE TABLE IF NOT EXISTS todolist (
                     item TEXT,
-                    creationdate DATETIME)");
- 
+                    creationdate DATETIME,
+                    priority INTEGER)");
  
     // Array with some test data to insert to database             
     
-$items = array(
-                  array('item' => 'testItemTODO',
-                        'creationdate' => '2015-08-24 01:02:03'),
+    $items = array(
+                  array('item' => 'testItemTODO1',
+                        'creationdate' => '2015-08-24 01:02:03',
+                        'priority' => 1),
                   array('item' => 'testItemTODO2',
-                        'creationdate' => '2015-08-24 01:02:04'),
+                        'creationdate' => '2015-08-24 01:02:04',
+                        'priority' => 2),
+                  array('item' => 'testItemTODO3',
+                        'creationdate' => '2015-08-24 01:02:05',
+                        'priority' => 3),
                 );
   
     // Prepare INSERT statement to SQLite3 file db
-    $insert = "INSERT INTO todolist (item, creationdate) 
-                VALUES (:item, :creationdate)";
+    $insert = "INSERT INTO todolist (item, creationdate, priority) 
+                VALUES (:item, :creationdate, :priority)";
     $stmt = $file_db->prepare($insert);
 
     // Bind parameters to statement variables
     $stmt->bindParam(':item', $item);
     $stmt->bindParam(':creationdate', $creationdate);
+    $stmt->bindParam(':priority', $priority);
 
     // Loop thru all messages and execute prepared insert statement
     foreach ($items as $i) {
       // Set values to bound variables
       $item =  $i['item'];
       $creationdate = $i['creationdate'];
- 
+      $priority = $i['priority'];
       // Execute statement
       $stmt->execute();
     }
@@ -65,6 +71,7 @@ $items = array(
         $item             = array();
         $item["item"] = $row["item"];
         $item["creationdate"] = $row["creationdate"];
+        $item["priority"] = $row["priority"];
         
         //update our repsonse JSON data
         array_push($response["items"], $item);

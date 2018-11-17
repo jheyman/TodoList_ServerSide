@@ -7,13 +7,19 @@
     $file_db->setAttribute(PDO::ATTR_ERRMODE, 
                             PDO::ERRMODE_EXCEPTION);
 
+
+    // House keeping: delete empty/void items that may have been created by mistake.
+    $delete = "DELETE FROM todolist WHERE item IS NULL";
+    $stmt = $file_db->prepare($delete);
+    $stmt->execute();
+
+    // Prepare the actual useful command
      if($_REQUEST["whereClause"] == "*") {
         $delete = "DELETE FROM todolist";
      }
      else {
-
-	$tmp = SQLite3::escapeString($_REQUEST["whereClause"]);
-	$delete = "DELETE FROM todolist WHERE item='".$tmp."'";
+	     $tmp = SQLite3::escapeString($_REQUEST["whereClause"]);
+	     $delete = "DELETE FROM todolist WHERE item='".$tmp."'";
      }
 
     $stmt = $file_db->prepare($delete);
@@ -33,6 +39,7 @@
         $item             = array();
         $item["item"] = $row["item"];
         $item["creationdate"] = $row["creationdate"];
+        $item["priority"] = $row["priority"];
 
         //update our repsonse JSON data
         array_push($response["items"], $item);

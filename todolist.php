@@ -8,7 +8,7 @@
                             PDO::ERRMODE_EXCEPTION);
 
     // Create table messages
-    $file_db->exec("CREATE TABLE IF NOT EXISTS todolist (item TEXT, creationdate TEXT)");
+    $file_db->exec("CREATE TABLE IF NOT EXISTS todolist (item TEXT, creationdate TEXT, priority INTEGER)");
 
     // Select all data from file db messages table 
     $result = $file_db->query('SELECT * FROM todolist');
@@ -22,7 +22,8 @@
         $item             = array();
         $item["item"] = $row["item"];
         $item["creationdate"] = $row["creationdate"];
-
+        $item["priority"] = $row["priority"];
+        
         //update our repsonse JSON data
         array_push($response["items"], $item);
     }
